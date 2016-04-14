@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ app_name }}</title>
+  <link rel="stylesheet" href="/lib/mui/packages/cdn/css/mui.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/lib/mui/packages/cdn/js/mui.min.js"></script>
+  <script src="/lib/Chart.min.js"></script>
+  <script>
+
+  var sentiments_data = {{ sentiments_data|raw }}
+
+  </script>
+</head>
+<body>
+  <header class="mui-appbar mui--z1">
+    <strong id="app-name">{{ app_name }}</strong>
+  </header>
+
+  <div id="content-wrapper" class="mui--text-center">
+    <ul class="mui-tabs__bar">
+      <li class="mui--is-active">
+        <a data-mui-toggle="tab" data-mui-controls="pane-default-1">Sentiments</a></li>
+      <li>
+        <a data-mui-toggle="tab" data-mui-controls="pane-default-2">Key Phrases</a>
+      </li>
+      <li>
+        <a data-mui-toggle="tab" data-mui-controls="pane-default-3">Topics</a>
+      </li>
+    </ul>
+    
+    <div class="mui-tabs__pane mui--is-active" id="pane-default-1">
+      <canvas id="sentiments_chart" width="400" height="400"></canvas>
+    </div>
+
+    <div class="mui-tabs__pane" id="pane-default-2">
+      <ul class="align-left">
+      {% for row in key_phrases %}
+        <li>{{ row | highlight|raw }}</li>
+      {% endfor %}
+      </ul>
+    </div>
+
+    <div class="mui-tabs__pane" id="pane-default-3">
+      <table class="mui-table mui-table--bordered">
+        <thead>
+          <tr>
+            <th>Topic</th>
+            <th>Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in topics %}
+          <tr>
+            <td>{{ row.topic }}</td>
+            <td>{{ row.score }}</td>
+          </tr>
+          {% endfor %}  
+        </tbody>
+      </table>   
+    </div>
+  </div>
+    
+  <script src="/js/main.js"></script>
+</body>
+</html>

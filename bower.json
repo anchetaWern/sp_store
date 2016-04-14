@@ -1,0 +1,19 @@
+{
+  "name": "sp_store",
+  "version": "0.0.0",
+  "authors": [
+    "Wern Ancheta <ancheta.wern@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/lib/",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "mui": "~0.5.0"
+  }
+}

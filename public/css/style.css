@@ -1,0 +1,33 @@
+#content-wrapper {
+  width: 500px;
+  margin: 0 auto;
+}
+
+li {
+  margin-bottom: 20px;
+}
+
+.mui-table {
+  text-align: left;
+}
+
+#app-name {
+  font-size: 30px;
+}
+
+header {
+  padding: 10px;
+}
+
+.mui-tabs__pane {
+  padding-top: 40px;
+}
+
+.align-left {
+  text-align: left;
+}
+
+span.highlight {
+  background-color: #FAFA22;
+  padding: 5px;
+}
