@@ -1,12 +1,13 @@
 <?php
 namespace App\Lib;
 
-class HttpRequest {
-
+class HttpRequest 
+{
 	private $headers;
 	private $client;
 
-	public function __construct(){
+	public function __construct()
+    {
 		$this->headers = [
 			'Ocp-Apim-Subscription-Key' => getenv('CS_KEY'),
 			'Content-Type' => 'application/json',
@@ -17,8 +18,8 @@ class HttpRequest {
 		);
 	}
 
-	public function make($type, $endpoint, $body){
-		
+	public function make($type, $endpoint, $body)
+    {
 		try{
 			$response = $this->client->request(
 				$type, $endpoint, 
@@ -38,15 +39,11 @@ class HttpRequest {
 
 			return $response_body;
 
-		}catch(RequestException $e){
+		}catch (RequestException $e) {
 			if($e->hasReponse()){
 				$error_data = json_decode($e->getResponse()->getBody()->getContents(), true);
-				//log error
 				return ['error' => $error_data];
 			}
 		}
-
-
 	}
-
 }

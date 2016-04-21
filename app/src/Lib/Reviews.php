@@ -1,11 +1,12 @@
 <?php
 namespace App\Lib;
 
-class Reviews {
-
+class Reviews 
+{
 	private $db;
 
-	public function __construct(){
+	public function __construct()
+    {
 		$db_host = getenv('DB_HOST');
 		$db_name = getenv('DB_NAME');
 		$dsn = "mysql:host={$db_host};dbname={$db_name};charset=utf8";
@@ -14,7 +15,8 @@ class Reviews {
 		$this->db = $pdo;
 	}
 
-	public function getReviews(){
+	public function getReviews()
+    {
 		$select_statement = $this->db->select(['id', 'review AS text'])
 		           ->from('reviews')
 		           ->where('analyzed', '=', 0)
@@ -25,7 +27,8 @@ class Reviews {
 		return $data;
 	}
 
-	public function getSentiments(){
+	public function getSentiments()
+    {
 		//gets sentiments from DB
 		$select_statement = $this->db->select()
 			->from('review_sentiments');
@@ -35,30 +38,33 @@ class Reviews {
 		return $data;		
 	}
 
-	public function getTopics(){
+	public function getTopics()
+    {
 		$select_statement = $this->db->select(['topic', 'score'])
 			->from('topics')
-      ->orderBy('score', 'DESC')
-      ->limit(10);
+            ->orderBy('score', 'DESC')
+            ->limit(10);
 			
 		$stmt = $select_statement->execute();
 		$data = $stmt->fetchAll();
 		return $data;		
 	}
 
-	public function getKeyPhrases(){
+	public function getKeyPhrases()
+    {
 		$select_statement = $this->db->select(['review', 'key_phrases'])
 			->from('review_key_phrases')
-      ->join('reviews', 'review_key_phrases.review_id', '=', 'reviews.id')
-      ->where('analyzed', '=', 1)
-      ->limit(10);
+            ->join('reviews', 'review_key_phrases.review_id', '=', 'reviews.id')
+            ->where('analyzed', '=', 1)
+            ->limit(10);
 			
 		$stmt = $select_statement->execute();
 		$data = $stmt->fetchAll();
 		return $data;	
 	}
 
-	public function saveSentiments($sentiments){	
+	public function saveSentiments($sentiments)
+    {	
 		foreach($sentiments as $row){
 			$review_id = $row['id'];
 			$score = $row['score'];
@@ -69,21 +75,24 @@ class Reviews {
 		}
 	}
 
-	public function saveRequest($request_id, $request_type){
+	public function saveRequest($request_id, $request_type)
+    {
 		$insert_statement = $this->db->insert(['request_id', 'request_type', 'done'])
 				->into('requests')
 				->values([$request_id, $request_type, 0]);
 		$insert_statement->execute();
 	}
 
-	public function updateRequest($request_id){
+	public function updateRequest($request_id)
+    {
 		$update_statement = $this->db->update(['done' => 1])
 				->table('requests')
 				->where('request_id', '=', $request_id);
 		$update_statement->execute();
 	}
 
-	public function saveTopics($topics_data){
+	public function saveTopics($topics_data)
+    {
 		$topics = $topics_data['topics'];
 		foreach($topics as $row){
 			$topic_id = $row['id'];
@@ -107,7 +116,8 @@ class Reviews {
 		}
 	}
 
-	public function saveKeyPhrases($key_phrases){
+	public function saveKeyPhrases($key_phrases)
+    {
 		foreach($key_phrases as $row){
 			$review_id = $row['id'];
 			$phrases = json_encode($row['keyPhrases']);
@@ -118,7 +128,8 @@ class Reviews {
 		}
 	}
 
-	public function getPendingRequests(){
+	public function getPendingRequests()
+    {
 		$select_statement = $this->db->select()
 			->from('requests')
 			->where('done', '=', 0);
@@ -128,17 +139,19 @@ class Reviews {
 		return $data;	
 	}
 
-	public function setDone($from_id, $to_id){
+	public function setDone($from_id, $to_id)
+    {
 		$update_statement = $this->db->update(['analyzed' => 1])
-				->table('reviews')
-				->whereBetween('id', [$from_id, $to_id]);
+			->table('reviews')
+			->whereBetween('id', [$from_id, $to_id]);
 		$update_statement->execute();
 	}
 
-	public function getAverageSentiment(){
+	public function getAverageSentiment()
+    {
 		$select_statement = $this->db->select()
-		           ->from('review_sentiments')
-		           ->avg('score', 'avg_sentiment');
+           ->from('review_sentiments')
+           ->avg('score', 'avg_sentiment');
 		$stmt = $select_statement->execute();
 		$data = $stmt->fetch();
 		return $data['avg_sentiment'];

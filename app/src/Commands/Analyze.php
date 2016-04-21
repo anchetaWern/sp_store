@@ -1,22 +1,24 @@
 <?php
 require 'vendor/autoload.php';
+
 use \App\Lib\TextAnalyzer;
 use \App\Lib\Reviews;
 
-class AnalyzeCommand extends ConsoleKit\Command {
+class AnalyzeCommand extends ConsoleKit\Command 
+{
 	
-  public function execute(array $args, array $options = array()){
-		
-    $dotenv = new \Dotenv\Dotenv(__DIR__ . '/../../..');
-		$dotenv->load();
+    public function execute(array $args, array $options = array())
+    {
+        $dotenv = new \Dotenv\Dotenv(__DIR__ . '/../../..');
+        $dotenv->load();
     	
-    $reviews = new Reviews();
-    $text_analyzer = new TextAnalyzer();
-    	
+        $reviews = new Reviews();
+        $text_analyzer = new TextAnalyzer();
+           	
 		//check if there are pending requests
 		$pending_requests = $reviews->getPendingRequests();
 		foreach($pending_requests as $request){
-			
+	       	    	
 			$request_id = $request['request_id'];
 			$from_id = $request['from_review'];
 			$to_id = $request['to_review'];
@@ -44,20 +46,20 @@ class AnalyzeCommand extends ConsoleKit\Command {
 			$from_review = $docs[0]['id'];
 			$to_review = $docs[$total_docs - 1]['id'];
 
-      $sentiments_response = $text_analyzer->requestSentiments($docs);	
-      $reviews->saveSentiments($sentiments_response['documents']);
-      $this->writeln('saved sentiments!');
+            $sentiments_response = $text_analyzer->requestSentiments($docs);	
+            $reviews->saveSentiments($sentiments_response['documents']);
+            $this->writeln('saved sentiments!');
 
-      $key_phrases_response = $text_analyzer->requestKeyPhrases($docs);
-      $reviews->saveKeyPhrases($key_phrases_response['documents']);	
-      $this->writeln('saved key phrases!');
+            $key_phrases_response = $text_analyzer->requestKeyPhrases($docs);
+            $reviews->saveKeyPhrases($key_phrases_response['documents']);	
+            $this->writeln('saved key phrases!');
 
 			$topics_request_id = $text_analyzer->requestTopics($docs);
 			$reviews->saveRequest($topics_request_id, 'topics', $from_review, $to_review);	
 			$this->writeln('topics requested! request ID: ' . $topics_request_id);
 		}
 
-    $this->writeln('Done!', ConsoleKit\Colors::GREEN);
+        $this->writeln('Done!', ConsoleKit\Colors::GREEN);
   }
 }
 
