@@ -50,7 +50,7 @@ final class HomeAction
         $first_value = $avg_sentiment;
         $second_value = 1 - $avg_sentiment;
 
-        if($second_value > $first_value){
+        if ($second_value > $first_value) {
             $labels = array_reverse($labels);
             $colors = array_reverse($colors);
             $highlights = array_reverse($highlights);

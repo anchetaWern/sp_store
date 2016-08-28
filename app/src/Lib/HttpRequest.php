@@ -7,7 +7,7 @@ class HttpRequest
 	private $client;
 
 	public function __construct()
-    {
+  {
 		$this->headers = [
 			'Ocp-Apim-Subscription-Key' => getenv('CS_KEY'),
 			'Content-Type' => 'application/json',
@@ -19,7 +19,7 @@ class HttpRequest
 	}
 
 	public function make($type, $endpoint, $body)
-    {
+  {
 		try{
 			$response = $this->client->request(
 				$type, $endpoint, 
@@ -30,7 +30,7 @@ class HttpRequest
 			);
 			$response_body = json_decode($response->getBody()->getContents(), true);
 			
-			if($response->getStatusCode() == 202){
+			if ($response->getStatusCode() == 202) {
 				$operation_id = $response->getHeaderLine('x-aml-ta-request-id');
 				return [
 					'operation_id' => $operation_id
@@ -39,8 +39,8 @@ class HttpRequest
 
 			return $response_body;
 
-		}catch (RequestException $e) {
-			if($e->hasReponse()){
+		} catch (RequestException $e) {
+			if ($e->hasReponse()) {
 				$error_data = json_decode($e->getResponse()->getBody()->getContents(), true);
 				return ['error' => $error_data];
 			}
